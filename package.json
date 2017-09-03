@@ -1,0 +1,35 @@
+{
+  "name": "homebridge-anavi-infrared-aircon",
+  "version": "0.0.0",
+  "description": "Plugin for homebridge that combines LIRC and a temperature sensor into a thermostat accessory: https://github.com/nfarina/homebridge",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zwaldowski/homebridge-anavi-infrared-aircon.git"
+  },
+  "keywords": [
+    "homebridge-plugin",
+    "anavi-infrared",
+    "anavi",
+    "lirc",
+    "air-conditioner"
+  ],
+  "author": "Zachary Waldowski <zach@waldowski.me> (https://waldowski.me)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zwaldowski/homebridge-anavi-infrared-aircon/issues"
+  },
+  "homepage": "https://github.com/zwaldowski/homebridge-anavi-infrared-aircon#readme",
+  "engines": {
+    "node": ">=4.8.0",
+    "homebridge": ">=0.4.0"
+  },
+  "dependencies": {
+    "bmp085": "^0.4.0",
+    "htu21d-i2c": "^0.1.0",
+    "lirc_node": "0.0.4"
+  }
+}
