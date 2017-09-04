@@ -125,6 +125,9 @@ class AirConAccessory {
       service
         .getCharacteristic(Characteristic.TemperatureDisplayUnits)
         .setValue(Characteristic.TemperatureDisplayUnits.FAHRENHEIT)
+        .on('set', function(value, callback){
+          callback(null, Characteristic.TemperatureDisplayUnits.FAHRENHEIT)
+        })
 
       this.celsiusToDevice = function (temperature) {
         return Math.round(this.celsiusToFahrenheit(temperature))
@@ -133,17 +136,14 @@ class AirConAccessory {
       service
         .getCharacteristic(Characteristic.TemperatureDisplayUnits)
         .setValue(Characteristic.TemperatureDisplayUnits.CELSIUS)
+        .on('set', function(value, callback){
+          callback(null, Characteristic.TemperatureDisplayUnits.CELSIUS)
+        })
 
       this.celsiusToDevice = function (temperature) {
         return Math.round(temperature * 2) / 2
       }
     }
-
-    service
-      .getCharacteristic(Characteristic.TemperatureDisplayUnits)
-      .on('set', function(value, callback){
-        callback(new Error('Operation not supported'))
-      })
 
     switch (config.i2c && config.i2c.kind) {
     case "htu21d":
