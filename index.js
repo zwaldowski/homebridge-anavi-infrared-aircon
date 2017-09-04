@@ -68,14 +68,6 @@ class AirConAccessory {
     }
   }
 
-  fahrenheitToCelsius (temperature) {
-    return (temperature - 32) / 1.8
-  }
-
-  celsiusToFahrenheit(temperature) {
-    return (temperature * 1.8) + 32
-  }
-
   getTargetTemperature (callback) {
     callback(null, this.currentSetpoint)
   }
@@ -130,8 +122,10 @@ class AirConAccessory {
         })
 
       this.celsiusToDevice = function (temperature) {
-        return Math.round(this.celsiusToFahrenheit(temperature))
+        return Math.round((temperature * 1.8) + 32)
       }
+
+      break
     default:
       service
         .getCharacteristic(Characteristic.TemperatureDisplayUnits)
@@ -143,6 +137,8 @@ class AirConAccessory {
       this.celsiusToDevice = function (temperature) {
         return Math.round(temperature * 2) / 2
       }
+
+      break
     }
 
     switch (config.i2c && config.i2c.kind) {
