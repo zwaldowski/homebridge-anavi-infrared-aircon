@@ -87,7 +87,7 @@ class AirConAccessory {
     const oldValue = this.celsiusToDevice(this.currentSetpoint),
       newValue = this.celsiusToDevice(_newValue)
 
-    this.currentSetpoint = newValue
+    this.currentSetpoint = _newValue
 
     this.log('Set temperature to %s (from %s).', newValue, oldValue)
 
@@ -134,10 +134,7 @@ class AirConAccessory {
           callback(null, Characteristic.TemperatureDisplayUnits.CELSIUS)
         })
 
-      this.celsiusToDevice = function (temperature) {
-        return Math.round(temperature * 2) / 2
-      }
-
+      this.celsiusToDevice = Math.round
       break
     }
 
