@@ -26,10 +26,10 @@ class AirConAccessory {
     const service = new Service.AccessoryInformation()
 
     service
-      .setCharacteristic(Characteristic.Manufacturer, config.device.manufacturer)
-      .setCharacteristic(Characteristic.Model, config.device.model)
-      .setCharacteristic(Characteristic.SerialNumber, config.device.serial)
-      .setCharacteristic(Characteristic.FirmwareRevision, config.device.revision || plugin.version)
+      .setCharacteristic(Characteristic.Manufacturer, config.device && config.device.manufacturer)
+      .setCharacteristic(Characteristic.Model, config.device && config.device.model)
+      .setCharacteristic(Characteristic.SerialNumber, config.device && config.device.serial)
+      .setCharacteristic(Characteristic.FirmwareRevision, (config.device && config.device.revision) || plugin.version)
 
     return service
   }
@@ -145,11 +145,7 @@ class AirConAccessory {
         callback(new Error('Operation not supported'))
       })
 
-    if (typeof config.i2c === 'undefined') {
-      throw new Error('Must specify I2C sensor configuration')
-    }
-
-    switch (config.i2c.kind) {
+    switch (config.i2c && config.i2c.kind) {
     case "htu21d":
       const i2c_htu21d = require('htu21d-i2c')
       this.sensor = new i2c_htu21d(config.sensor)
@@ -165,19 +161,17 @@ class AirConAccessory {
 
       break
     default:
-      throw new Error('Unknown sensor kind')
+      throw new Error('Must specify I2C sensor configuration with known sensor kind "htu21d" or "dht22"')
     }
 
     service
       .getCharacteristic(Characteristic.CurrentTemperature)
       .on('get', this.getCurrentTemperature.bind(this))
 
-    if (typeof config.ir !== 'undefined' && typeof config.ir.name !== 'undefined') {
-      const lirc = require('lirc_node'),
-        name = config.ir.name
-
+    if (config.ir && config.ir.name) {
+      const lirc = require('lirc_node')
       this.remoteSend = function(button, callback) {
-        lirc.irsend.send_once(name, button, callback)
+        lirc.irsend.send_once(config.ir.name, button, callback)
       }
     } else {
       throw new Error('Need device name for LIRC.')
