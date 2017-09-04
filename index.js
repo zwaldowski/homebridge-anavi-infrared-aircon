@@ -34,16 +34,6 @@ class AirConAccessory {
     return service
   }
 
-  getTemperatureDisplayUnits (callback) {
-    callback(null, this.temperatureDisplayUnits)
-  }
-
-  setTemperatureDisplayUnits (value, callback) {
-    this.log("Temperature display unit to %s.", value)
-    this.temperatureDisplayUnits = value
-    callback(null, this.temperatureDisplayUnits)
-  }
-
   getCurrentTemperature (callback) {
     this.sensor.readTemperature(function(tempInC) {
       callback(null, tempInC)
@@ -132,12 +122,18 @@ class AirConAccessory {
 
     switch (config.unit) {
     case "fahrenheit":
-      this.temperatureDisplayUnits = Characteristic.TemperatureDisplayUnits.FAHRENHEIT
+      service
+        .getCharacteristic(Characteristic.TemperatureDisplayUnits)
+        .setValue(Characteristic.TemperatureDisplayUnits.FAHRENHEIT)
+
       this.celsiusToDevice = function (temperature) {
         return Math.round(this.celsiusToFahrenheit(temperature))
       }
     default:
-      this.temperatureDisplayUnits = Characteristic.TemperatureDisplayUnits.CELSIUS
+      service
+        .getCharacteristic(Characteristic.TemperatureDisplayUnits)
+        .setValue(Characteristic.TemperatureDisplayUnits.CELSIUS)
+
       this.celsiusToDevice = function (temperature) {
         return Math.round(temperature * 2) / 2
       }
@@ -145,8 +141,9 @@ class AirConAccessory {
 
     service
       .getCharacteristic(Characteristic.TemperatureDisplayUnits)
-      .on('get', this.getTemperatureDisplayUnits.bind(this))
-      .on('set', this.setTemperatureDisplayUnits.bind(this))
+      .on('set', function(value, callback){
+        callback(new Error('Operation not supported'))
+      })
 
     if (typeof config.i2c === 'undefined') {
       throw new Error('Must specify I2C sensor configuration')
