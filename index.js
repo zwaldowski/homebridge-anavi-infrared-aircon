@@ -80,6 +80,17 @@ class AirConAccessory {
     callback(null, this.currentSetpoint)
   }
 
+  recursiveRemoteSend(command, stepsRemaining, callback) {
+    if (stepsRemaining <= 0) {
+      callback()
+      return
+    }
+
+    this.remoteSend(command, (function() {
+      this.recursiveRemoteSend(command, stepsRemaining - 1, callback)
+    }).bind(this))
+  }
+
   setTargetTemperature (_newValue, callback) {
     const oldValue = this.celsiusToDevice(this.currentSetpoint),
       newValue = this.celsiusToDevice(_newValue)
@@ -90,31 +101,20 @@ class AirConAccessory {
 
     this.thermostatService
       .getCharacteristic(Characteristic.TargetHeatingCoolingState)
-      .setValue(Characteristic.TargetHeatingCoolingState.COOL, function(error) {
+      .setValue(Characteristic.TargetHeatingCoolingState.COOL, (function(error) {
         if (error) {
           callback(error)
           return
         }
 
-        function handleNext(command, stepsRemaining) {
-          if (stepsRemaining <= 0) {
-            callback()
-            return
-          }
-
-          this.remoteSend(command, function() {
-            handleNext(command, stepsRemaining - 1)
-          })
-        }
-
         if (oldValue < newValue) {
-          handleNext('BTN_GEAR_UP', newValue - oldValue)
+          this.recursiveRemoteSend('BTN_GEAR_UP', newValue - oldValue, callback)
         } else if (oldValue > newValue) {
-          handleNext('BTN_GEAR_DOWN', oldValue - newValue)
+          this.recursiveRemoteSend('BTN_GEAR_DOWN', oldValue - newValue, callback)
         } else {
           callback()
         }
-      })
+      }).bind(this))
   }
 
   makeThermostatService(config) {
