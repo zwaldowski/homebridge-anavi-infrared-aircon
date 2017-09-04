@@ -1,0 +1,30 @@
+{
+    "bridge": {
+        "name": "Raspberry Pi",
+        "username": "00:00:00:00:00:00", # cat /sys/class/net/wlan0/address
+        "pin": "123-45-678",
+        "manufacturer": "Raspberry Pi Foundation", # optional
+        "model": "Zero W 1.1", # optional; up to you
+        "serialNumber": "0000000044bb145c" # optional; cat /proc/cpuinfo | grep Serial | awk ' {print $3}'
+    },
+    "accessories": [ {
+        "accessory": "aircon-ir-remote",
+        "name": "Air Conditioner",
+        "minSetpoint": 16, # optional
+        "defaultSetpoint": 20, # optional
+        "maxSetpoint": 30, # optional
+        "unit": "fahrenheit", # optional, default "celsius"
+        "device": { # optional
+            "manufacturer": "LG", # optional
+            "model": "LW6016R", # optional
+            "serial": "000000000000" # optional
+        },
+        "ir": {
+            "name": "lirc_device_name"
+        },
+        "i2c": {
+            "kind": "htu21d" # or "dht22", but you lose the humidity reading
+            "device": "/dev/i2c-1" # optional, see https://www.npmjs.com/package/i2c
+        }
+    } ]
+}
