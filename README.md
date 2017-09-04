@@ -1,20 +1,23 @@
-# Homebridge Air Conditioner with ANAVI  -anavi-infrared-aircon
+# Homebridge Air Conditioner with ANAVI Infrared
 
-[Homebridge](https://github.com/nfarina/homebridge) plugin that uses [ANAVI Infrared](http://anavi.technology/#products) to drive a air conditioner with a simple power/up/down remote.
+[Homebridge](https://github.com/nfarina/homebridge) plugin that uses [ANAVI Infrared](http://anavi.technology/#products) to drive a “dumb” air conditioner with a unidirectional remote with power, up, and down commands.
+
+The plugin was designed and tested on 
 
 ## Prerequisites
 
+- Enable I2C.
+- Enable LIRC module overlay.
+- Update `/etc/lirc/lirc_options.conf` and `/etc/lirc/hardware.conf` for the hardware.
+- Reboot.
 - Install packages. For Raspbian Stretch:
 
 ```shell
 # apt install nodejs-legacy npm lirc i2c-tools libavahi-compat-libdnssd-dev
 ```
 
-- Enable I2C.
-- Enable LIRC module overlay.
-- Update `/etc/lirc/lirc_options.conf` and `/etc/lirc/hardware.conf`.
-- Reboot
 - Create LIRC configuration.
+- Install [Homebridge](https://github.com/nfarina/homebridge#installation).
 
 ### Further reading
 
@@ -28,7 +31,7 @@
 # npm install -g homebridge homebriage-anavi-infrared-aircon
 ```
 
-Update your configuration file to include a `aircon-ir-remote` accessory. See an example at `sample-config.json`.
+Update your configuration to include a `aircon-ir-remote` accessory. See an example at [`sample-config.json`](https://github.com/zwaldowski/homebridge-anavi-infrared-aircon/blob/master/config-sample.json).
 
 ## Persistent Installation
 
