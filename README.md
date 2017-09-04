@@ -2,7 +2,7 @@
 
 [Homebridge](https://github.com/nfarina/homebridge) plugin that uses [ANAVI Infrared](http://anavi.technology/#products) to drive a “dumb” air conditioner with a unidirectional remote with power, up, and down commands.
 
-The plugin was designed and tested on 
+The plugin was designed and tested on [Raspberry Pi Zero W](https://www.raspberrypi.org/products/raspberry-pi-zero-w/).
 
 ## Prerequisites
 
