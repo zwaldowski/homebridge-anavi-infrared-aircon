@@ -50,7 +50,7 @@ class AirConAccessory {
     callback(null, this.heatingCoolingState)
   }
 
-  setTargetHeatingCoolingState (callback) {
+  setTargetHeatingCoolingState (value, callback) {
     this.log('Power state to %s.', value)
 
     if ((value !== Characteristic.TargetHeatingCoolingState.OFF) && (this.heatingCoolingState === Characteristic.TargetHeatingCoolingState.OFF)) {
