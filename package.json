@@ -1,6 +1,6 @@
 {
   "name": "homebridge-anavi-infrared-aircon",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Plugin for homebridge that combines LIRC and a temperature sensor into a thermostat accessory: https://github.com/nfarina/homebridge",
   "main": "index.js",
   "scripts": {
