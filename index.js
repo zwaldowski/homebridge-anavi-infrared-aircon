@@ -178,6 +178,9 @@ class AirConAccessory {
 
     service
       .getCharacteristic(Characteristic.TargetHeatingCoolingState)
+      .setProps({
+        validValues: [0, 2],
+      })
       .setValue(this.heatingCoolingState)
       .on('set', this.setTargetHeatingCoolingState.bind(this))
 
