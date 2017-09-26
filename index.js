@@ -97,7 +97,7 @@ class AirConAccessory {
         return
       }
 
-      const turnOffIfNeeded = (typeof error === 'undefined') ? function(error) {
+      const turnOffIfNeeded = (typeof error !== 'undefined') ? function(error) {
         if (error) {
           callback(error)
           return
