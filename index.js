@@ -91,22 +91,28 @@ class AirConAccessory {
 
     this.log('Set temperature to %s (from %s).', newValue, oldValue)
 
-    this.thermostatService
-      .getCharacteristic(Characteristic.TargetHeatingCoolingState)
-      .setValue(Characteristic.TargetHeatingCoolingState.COOL, (function(error) {
+    this.setTargetHeatingCoolingState(Characteristic.TargetHeatingCoolingState.COOL, function(error) {
+      if (error) {
+        callback(error)
+        return
+      }
+
+      const turnOffIfNeeded = (typeof error === 'undefined') ? function(error) {
         if (error) {
           callback(error)
           return
         }
+        this.setTargetHeatingCoolingState(Characteristic.TargetHeatingCoolingState.OFF, callback)
+      }.bind(this) : callback
 
-        if (oldValue < newValue) {
-          this.recursiveRemoteSend('BTN_GEAR_UP', newValue - oldValue, callback)
-        } else if (oldValue > newValue) {
-          this.recursiveRemoteSend('BTN_GEAR_DOWN', oldValue - newValue, callback)
-        } else {
-          callback()
-        }
-      }).bind(this))
+      if (oldValue < newValue) {
+        this.recursiveRemoteSend('BTN_GEAR_UP', newValue - oldValue, turnOffIfNeeded)
+      } else if (oldValue > newValue) {
+        this.recursiveRemoteSend('BTN_GEAR_DOWN', oldValue - newValue, turnOffIfNeeded)
+      } else {
+        turnOffIfNeeded()
+      }
+    }.bind(this))
   }
 
   makeThermostatService(config) {
@@ -178,10 +184,11 @@ class AirConAccessory {
 
     service
       .getCharacteristic(Characteristic.TargetHeatingCoolingState)
-      .setProps({
-        validValues: [0, 2],
-      })
-      .setValue(this.heatingCoolingState)
+      .setProps({ validValues: [
+        Characteristic.TargetHeatingCoolingState.OFF,
+        Characteristic.TargetHeatingCoolingState.COOL
+      ] })
+      .updateValue(this.heatingCoolingState)
       .on('set', this.setTargetHeatingCoolingState.bind(this))
 
     this.currentSetpoint = config.defaultSetpoint || 20
